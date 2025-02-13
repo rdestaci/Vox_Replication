@@ -1,6 +1,6 @@
 ---
 title: "Final_css_205"
-author: "Belynda Herrera"
+author: "Reeka Estacio And Belynda Herrera"
 date: "2025-02-11"
 output:
   word_document: default
@@ -13,11 +13,12 @@ knitr::opts_chunk$set(echo = TRUE)
 library(readr)
 library(ggplot2)
 library(dplyr)
+library(haven)
 ```
 Load the data for your replication project into R.  Produce the following:
 ```{r}
-#To open as CSV install.packages("haven")  # Install if not already installed
-library(haven)
+
+
 
 # Read .dta file
 data <- read_dta("Downloads/Cleaned Data.dta")
