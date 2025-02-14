@@ -1,5 +1,5 @@
 ---
-title: "Final_css_205"
+title: "Replication of 'Sexism and the Far-Right Vote: The Individual Dynamics of Gender Backlash' (Anduiza & Rico, 2022)"
 author: "Reeka Estacio And Belynda Herrera"
 date: "2025-02-11"
 output:
@@ -14,67 +14,62 @@ library(readr)
 library(ggplot2)
 library(dplyr)
 library(haven)
+library(corrplot)
 ```
-Load the data for your replication project into R.  Produce the following:
+
+For the final project, we intend to reproduce the binary logit model for the year 2019, modeling the intention to vote for the Vox party. The regression table of this model is located in the first column of "Table 1. Predictors of Intention to Vote for Vox in 2019 and 2020" of the original paper.
+
+In the paper, the model is described as:
+$$vox_{it} = sexism_{it} + other attitudes_{it} + controls_{it}$$
+# Load data
 ```{r}
-
-
-
 # Read .dta file
-data <- read_dta("Downloads/Cleaned Data.dta")
+dat <- read_dta("cleaned.dta")
 
 # Save as CSV
-write.csv(data, "Downloads/Cleaned Data.dta", row.names = FALSE)
+write.csv(dat, "cleaned.csv", row.names = FALSE)
 ```
 
-A histogram of the dependent variable
+# Histogram of the dependent variable
+
+The dependent variable of this model is `vim_vox`. This is a binary variable indicating a person's intention to vote for the Vox party.
 
 ```{r cars}
-ggplot(data, aes(x = femindexa)) + 
-  geom_histogram(bins = 30, fill = "blue", color = "black") +
-  labs(title = "Histogram of Modern Sexism",
-       x = "Modern Sexism Score",
-       y = "Frequency") +
-  theme_minimal()
+hist(dat$vim_vox, breaks = 2, col = "lightblue", main = "Histogram of Intention to Vote for Vox",
+      xlab = "Vote Intention for Vox", ylab = "Frequency")
+
 ```
 
-## Including Plots
-```{r}
-# Select  columns
-subset_data <- data[, c("femindexa", "sex", "lrself", "voteintentionspain", "femstrike")]
+## Correlation matrix of the DV and IVs of the Model 1 (2019)
 
-# Removing rows with any missing data for simplicity
+The correlation matrix produced below includes the dependent variable (`vim_vox`) and the exact independent variables used to produce the original model corresponding to the year 2019.
+
+```{r}
+# Select relevant variables based on Model 1 (2019)
+subset_data <- dat %>% select(female, age, edu3_2, edu3_3, dhincome_all, livingpartner, 
+                             intpol, l2vim_vox, l2authoritarian, l2ideol, l2nativism, 
+                             l2orgterr, l2pop6amz, l2msexism, lsvim_vox, lsauthoritarian, 
+                             lsideol, lsnativism, lsorgterr, lspop6amz, lsmsexism, vim_vox)
+
+# Remove rows with missing values
 clean_data <- na.omit(subset_data)
 
 # Convert categorical variables to numeric
-clean_data$sex <- as.numeric(as.factor(clean_data$sex))
-clean_data$voteintentionspain <- as.numeric(as.factor(clean_data$voteintentionspain)) 
+clean_data$female <- as.numeric(as.factor(clean_data$female))
+clean_data$edu3_2 <- as.numeric(as.factor(clean_data$edu3_2))
+clean_data$edu3_3 <- as.numeric(as.factor(clean_data$edu3_3))
+clean_data$livingpartner <- as.numeric(as.factor(clean_data$livingpartner))
+clean_data$vim_vox <- as.numeric(as.factor(clean_data$vim_vox)) # Dependent variable
 
 # Calculate the correlation matrix
 cor_matrix <- cor(clean_data)
 
-# Load the library
-library(corrplot)
-
-
 # Plot the correlation matrix
 corrplot(cor_matrix, method = "color", type = "upper", tl.cex = 0.7, 
          tl.col = "black", addCoef.col = "black", number.cex = 0.7)
-
 ```
 
-```{r}
-install.packages("mice", repos = "http://cran.rstudio.com")
-
-# Select relevant columns
-subset_data <- data[, c("femindexa", "sex", "lrself", "voteintentionspain", "femstrike")]
-
-# Generate a missingness pattern table
-md.pattern(subset_data)
-
-
-```
-Visual Representation of Missing Data
+# Visual Representation of Missing Data
 
 A missingness map highlights missing values in the dataset.
 ```{r}
