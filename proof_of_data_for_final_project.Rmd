@@ -77,7 +77,7 @@ The missingness map highlights missing values in the variables used in this mode
 library(Amelia)
 
 # Generate a missingness map
-missmap(subset_data, col = c("blue", "red"), legend = TRUE)
+missmap(subset_data, col = c("red", "blue"), legend = TRUE)
 
 ```
 
