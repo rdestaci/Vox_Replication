@@ -8,13 +8,10 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-rm(list = ls())
 knitr::opts_chunk$set(echo = TRUE)
-library(readr)
 library(ggplot2)
 library(dplyr)
 library(haven)
-library(corrplot)
 ```
 
 For the final project, we (**Reeka Estacio** and **Belynda Herrera**) intend to reproduce the binary logit model for the year 2019, modeling the intention to vote for the Vox party. The regression table of this model is located in the first column of "Table 1. Predictors of Intention to Vote for Vox in 2019 and 2020" of the original paper.
@@ -34,10 +31,9 @@ write.csv(dat, "cleaned.csv", row.names = FALSE)
 
 The dependent variable of this model is `vim_vox`. This is a binary variable indicating a person's intention to vote for the Vox party.
 
-```{r cars}
+```{r}
 hist(dat$vim_vox, breaks = 2, col = "lightblue", main = "Histogram of Intention to Vote for Vox",
       xlab = "Vote Intention for Vox", ylab = "Frequency")
-
 ```
 
 ## Correlation matrix of the DV and IVs of the Model 1 (2019)
@@ -45,28 +41,28 @@ hist(dat$vim_vox, breaks = 2, col = "lightblue", main = "Histogram of Intention 
 The correlation matrix produced below includes the dependent variable (`vim_vox`) and the exact independent variables used to produce the original model corresponding to the year 2019.
 
 ```{r}
-# Select relevant variables based on Model 1 (2019)
-subset_data <- dat %>% select(female, age, edu3_2, edu3_3, dhincome_all, livingpartner, 
-                             intpol, l2vim_vox, l2authoritarian, l2ideol, l2nativism, 
-                             l2orgterr, l2pop6amz, l2msexism, lsvim_vox, lsauthoritarian, 
-                             lsideol, lsnativism, lsorgterr, lspop6amz, lsmsexism, vim_vox)
+library(corrplot)
 
-# Remove rows with missing values
-clean_data <- na.omit(subset_data)
+# Filter data for the year 2019
+data_2019 <- dat %>% filter(year == 2019)
 
-# Convert categorical variables to numeric
-clean_data$female <- as.numeric(as.factor(clean_data$female))
-clean_data$edu3_2 <- as.numeric(as.factor(clean_data$edu3_2))
-clean_data$edu3_3 <- as.numeric(as.factor(clean_data$edu3_3))
-clean_data$livingpartner <- as.numeric(as.factor(clean_data$livingpartner))
-clean_data$vim_vox <- as.numeric(as.factor(clean_data$vim_vox)) # Dependent variable
+# Select relevant numeric variables from your model
+subset_data <- data_2019 %>% 
+  select(female, age, edu3_2, edu3_3, dhincome_all, livingpartner, intpol, 
+         l2vim_vox, l2authoritarian, l2ideol, l2nativism, l2orgterr, l2pop6amz, 
+         l2swim_msex, lsvim_vox, lsauthoritarian, lsideol, lsnativism, 
+         lsorgterr, lspop6amz, lsswim_msex)
 
-# Calculate the correlation matrix
-cor_matrix <- cor(clean_data)
+# Remove missing values
+clean_data <- subset_data %>%
+  na.omit()
 
-# Plot the correlation matrix
-corrplot(cor_matrix, method = "color", type = "upper", tl.cex = 0.7, 
-         tl.col = "black", addCoef.col = "black", number.cex = 0.7)
+# Compute correlation matrix
+cor_matrix <- cor(clean_data, use = "complete.obs")
+
+# Plot correlation matrix
+corrplot(cor_matrix, method = "color", type = "lower", 
+         tl.cex = 0.7, tl.col = "black", number.cex = 0.7)
 ```
 
 # Visual Representation of Missing Data
@@ -77,27 +73,20 @@ The missingness map highlights missing values in the variables used in this mode
 library(Amelia)
 
 # Generate a missingness map
-missmap(subset_data, col = c("red", "blue"), legend = TRUE)
-
+missmap(subset_data, col = c("red", "navyblue"), legend = TRUE)
 ```
-
-Proportion of Missing Data
-A bar plot showing the proportion of missing values per variable.
+The bar plot shows the proportion of missing values per variable (missing data in red, observed data in blue). The aggregation plot shows frequency of missingness across different combinations of the variables.
 
 ```{r}
-# Load VIM library
 library(VIM)
 
 # Bar plot of missing data proportions
 aggr(subset_data, col = c("navyblue", "red"), numbers = TRUE, sortVars = TRUE, 
      labels = names(subset_data), cex.axis = 0.7, gap = 2, 
-     ylab = c("Missing Data Pattern", "Proportion of Missingness"))
-
+     ylab = c("Proportion of missings", "Combinations"))
 ```
+# Appendix
 
-An aggregation plot displays missing data in different variable combinations
-```{r}
-matrixplot(subset_data, sortby = "femindexa", col = c("grey", "black"))
+We used ChatGPT in this assignment to help make the correlation matrix. It was helpful for understanding how to create the correlation plot for the specific variables used in the model we intend to replicate. It also highlighted key factors we missed when we initially generated the plot (e.g. filtering to only include data for the year 2019).
 
-```
-
+[Link to conversation](https://chatgpt.com/share/67aea90a-7e44-8003-a1d7-fa691f7c628f)
