@@ -3,7 +3,6 @@ title: "Replication of 'Sexism and the Far-Right Vote: The Individual Dynamics o
 author: "Reeka Estacio And Belynda Herrera"
 date: "2025-02-11"
 output:
-  word_document: default
   pdf_document: default
 ---
 
@@ -16,9 +15,10 @@ library(haven)
 
 For the final project, we (**Reeka Estacio** and **Belynda Herrera**) intend to reproduce the binary logit model for the year 2019, modeling the intention to vote for the Vox party. The regression table of this model is located in the first column of "Table 1. Predictors of Intention to Vote for Vox in 2019 and 2020" of the original paper.
 
-In the paper, the model is described as:
-$$vox_{it} = sexism_{it} + other attitudes_{it} + controls_{it}$$
+In the paper, the model is described as: $$vox_{it} = sexism_{it} + other attitudes_{it} + controls_{it}$$
+
 # Load data
+
 ```{r}
 # Read .dta file
 dat <- read_dta("cleaned.dta")
@@ -68,6 +68,7 @@ corrplot(cor_matrix, method = "color", type = "lower",
 # Visual Representation of Missing Data
 
 The missingness map highlights missing values in the variables used in this model.
+
 ```{r}
 # Load the Amelia package
 library(Amelia)
@@ -75,6 +76,7 @@ library(Amelia)
 # Generate a missingness map
 missmap(subset_data, col = c("red", "navyblue"), legend = TRUE)
 ```
+
 The bar plot shows the proportion of missing values per variable (missing data in red, observed data in blue). The aggregation plot shows frequency of missingness across different combinations of the variables.
 
 ```{r}
@@ -85,6 +87,7 @@ aggr(subset_data, col = c("navyblue", "red"), numbers = TRUE, sortVars = TRUE,
      labels = names(subset_data), cex.axis = 0.7, gap = 2, 
      ylab = c("Proportion of missings", "Combinations"))
 ```
+
 # Appendix
 
 We used ChatGPT in this assignment to help make the correlation matrix. It was helpful for understanding how to create the correlation plot for the specific variables used in the model we intend to replicate. It also highlighted key factors we missed when we initially generated the plot (e.g. filtering to only include data for the year 2019).
