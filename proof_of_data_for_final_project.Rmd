@@ -17,7 +17,7 @@ library(haven)
 library(corrplot)
 ```
 
-For the final project, we intend to reproduce the binary logit model for the year 2019, modeling the intention to vote for the Vox party. The regression table of this model is located in the first column of "Table 1. Predictors of Intention to Vote for Vox in 2019 and 2020" of the original paper.
+For the final project, we (**Reeka Estacio** and **Belynda Herrera**) intend to reproduce the binary logit model for the year 2019, modeling the intention to vote for the Vox party. The regression table of this model is located in the first column of "Table 1. Predictors of Intention to Vote for Vox in 2019 and 2020" of the original paper.
 
 In the paper, the model is described as:
 $$vox_{it} = sexism_{it} + other attitudes_{it} + controls_{it}$$
@@ -71,7 +71,7 @@ corrplot(cor_matrix, method = "color", type = "upper", tl.cex = 0.7,
 
 # Visual Representation of Missing Data
 
-A missingness map highlights missing values in the dataset.
+The missingness map highlights missing values in the variables used in this model.
 ```{r}
 # Load the Amelia package
 library(Amelia)
