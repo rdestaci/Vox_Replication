@@ -13,6 +13,10 @@ library(tidyverse)
 ```
 
 # Introduction
+The study "Sexism and the Far-Right Vote: The Individual Dynamics of Gender Backlash" by Eva Anduiza and Guillem Rico, published in the American Journal of Political Science (AJPS), examines the relationship between sexist attitudes and support for far-right political parties. The authors argue that gender backlash—a reactionary response to perceived advances in gender equality—plays a crucial role in shaping voting behavior.
+
+Using survey data collected between 2017 and 2020, the study investigates whether changes in sexism over time are associated with increased support for Vox, a far-right party in Spain. The authors hypothesize that individuals who express greater sexist attitudes over time are more likely to support the far-right, reflecting a broader trend of gendered political polarization.
+
 
 ## Original Study
 
