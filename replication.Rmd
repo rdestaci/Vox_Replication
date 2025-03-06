@@ -27,12 +27,14 @@ head(vox)
 
 
 What is the unit of analysis? (what are the cases in the dataset)
+The unit of analysis in this dataset is individual survey respondents. Each row in the dataset represents an individual who participated in the survey, providing responses on their political preferences, sexist attitudes, and demographic characteristics over multiple time periods.
 
 Any concerns about observational independence?
 
 How many observations are there?
 
 How was the data collected?
+The dataset was collected through survey responses in Spain, covering multiple waves from 2017 to 2020. The data was collected before and after key political events (e.g., elections, feminist protests) to capture potential shifts in attitudes and voting behavior.
 
 ### Original Model 
 
