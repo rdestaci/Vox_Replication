@@ -30,7 +30,7 @@ What is the unit of analysis? (what are the cases in the dataset)
 The unit of analysis in this dataset is individual survey respondents. Each row in the dataset represents an individual who participated in the survey, providing responses on their political preferences, sexist attitudes, and demographic characteristics over multiple time periods.
 
 Any concerns about observational independence?
-
+Observational independence concerns exist because the longitudinal dataset (2017-2020) introduces within-subject correlation as the same individuals were tracked over time. Respondents may modify their self-reported sexism and political preferences based on social norms, creating measurement bias. Additionally, major events like #MeToo and Women's Day protests likely influenced responses across the sample simultaneously, creating time-based dependencies.
 How many observations are there?
 
 How was the data collected?
