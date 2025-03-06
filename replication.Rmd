@@ -31,6 +31,7 @@ The unit of analysis in this dataset is individual survey respondents. Each row 
 
 Any concerns about observational independence?
 Observational independence concerns exist because the longitudinal dataset (2017-2020) introduces within-subject correlation as the same individuals were tracked over time. Respondents may modify their self-reported sexism and political preferences based on social norms, creating measurement bias. Additionally, major events like #MeToo and Women's Day protests likely influenced responses across the sample simultaneously, creating time-based dependencies.
+
 How many observations are there?
 
 How was the data collected?
@@ -39,9 +40,11 @@ The dataset was collected through survey responses in Spain, covering multiple w
 ### Original Model 
 
 What is the dependent variable? Describe it, what kind of data is it? (Binary)
+The dependent variable measures whether a respondent votes for a far-right party or not. It captures voting behavior as an outcome influenced by sexist attitudes and other variables.
 **PLOT THE DISTRIBUTION OF THE DV**
 
 What are the predictor variables?
+The study examines several predictors to explain support for far-right parties, with a focus on sexist attitudes as the central explanatory variable.
 
 What kind of model are you replicating? (logit)
 
