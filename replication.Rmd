@@ -1,0 +1,138 @@
+---
+title: "Replication of 'Sexism and the Far-Right Vote: The Individual Dynamics of
+  Gender Backlash' (Anduiza & Rico, 2022)"
+author: "Reeka Estacio and Belynda Herrera"
+date: "2025-03-05"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+# hide code chunks in rendered document
+knitr::opts_chunk$set(echo = FALSE) 
+library(tidyverse)
+```
+
+# Introduction
+
+## Original Study
+
+What is the unit of analysis? (what are the cases in the dataset)
+
+Any concerns about observational independence?
+
+How many observations are there?
+
+How was the data collected?
+
+### Original Model 
+
+What is the dependent variable? Describe it, what kind of data is it? (Binary)
+**PLOT THE DISTRIBUTION OF THE DV**
+
+What are the predictor variables?
+
+What kind of model are you replicating? (logit)
+
+What do the original authors hope to achieve with this model?
+
+**INCLUDE SCREENSHOT OF ORIGINAL REGRESSION TABLE**
+
+# Replication of Original Model
+
+As in the original model, we fit a logistic regression on...
+
+The regression table is presented below.
+
+```{r}
+# Replicate model
+
+# modelsummary(replicated_model, output="gt")
+```
+
+# Additional Model
+
+We also considered (adding new predictor/removing predictor/changing link function) because...
+
+```{r}
+# Additional model
+
+# modelsummary(new_model, output="gt")
+```
+
+# Comparing Models
+
+## In-Sample Prediction
+
+```{r}
+# Show both models
+
+# models <- list(original_model, new_model)
+# modelsummary(models, output="gt")
+```
+
+Compare AIC/BIC, log likelihood, MSE.
+
+## Out-of-Sample Prediction
+
+```{r}
+# Use cross-validation
+# Calculate error
+```
+
+Interpret this. 
+
+Based on the error, (original/new) model performs better on out-of-sample prediction.
+
+Ultimately, we believe the **(original/new) model** is the better model because...
+
+# Exploring the Effect of (Quantity of Interest)
+
+We aim to explore the effect of (quantity of interest) on (dependent variable).
+
+```{r}
+# From problem set
+# ADAPT TO CURRENT DATA
+
+# Make scenarios
+# Hold sanctions75 and pop75 fixed at the median 
+scenarios <- data.frame(
+  sanctions75 = median(dat$sanctions75),
+  pop75 = median(dat$pop75),
+  polrights75 = seq(min(dat$polrights75, na.rm = TRUE), max(dat$polrights75, na.rm = TRUE)) # compare polrights75 at different values
+)
+
+# Generate predictions
+predictions <- predict(nb_mod, newdata = scenarios, type = "response", se.fit = TRUE)
+
+# Add predictions and confidence intervals to the dataframe
+scenarios$predicted_deaths75 <- predictions$fit
+scenarios$lower_ci <- predictions$fit - 1.96 * predictions$se.fit  
+scenarios$upper_ci <- predictions$fit + 1.96 * predictions$se.fit 
+
+# Plot predictions
+ggplot(scenarios, aes(x = polrights75, y = predicted_deaths75)) +
+  geom_line() +
+  geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), alpha = 0.2, fill = "blue") +
+  labs(title = "Effect of polrights75 on predicted deaths in 1975",
+       x = "`polrights75`",
+       y = "Predicted deaths in 1975") +
+  theme_minimal()
+```
+
+Interpret the results.
+
+Based on this plot, we see that (quantity of interest) has a ____ relationship on (dependent variable).
+
+# Summary
+
+Summarize conclusions.
+
+How confident are you about the original author's conclusions?
+
+What else would you like to see done with this?
+
+# Appendix
+
+We used ChatGPT to...
+
+[Link to conversation]()
