@@ -16,6 +16,12 @@ library(tidyverse)
 
 ## Original Study
 
+```{r}
+vox <- read.csv("data/cleaned.csv")
+head(vox)
+```
+
+
 What is the unit of analysis? (what are the cases in the dataset)
 
 Any concerns about observational independence?
