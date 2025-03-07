@@ -17,15 +17,22 @@ library(tidyverse)
 
 # Introduction
 
-The study ["Sexism and the Far-Right Vote: The Individual Dynamics of Gender Backlash"](https://doi.org/10.1111/ajps.12759) by Eva Anduiza and Guillem Rico (2022), published in the American Journal of Political Science (AJPS), examines the relationship between sexist attitudes and support for far-right political parties. The authors argue that gender backlash-—a reactionary response to perceived advances in gender equality-—plays a crucial role in shaping voting behavior.
+The study ["Sexism and the Far-Right Vote: The Individual Dynamics of Gender Backlash"](https://doi.org/10.1111/ajps.12759) by Eva Anduiza and Guillem Rico (2022), published in the American Journal of Political Science (AJPS), examines the relationship between sexist attitudes and support for far-right political parties.
+The authors argue that gender backlash-—a reactionary response to perceived advances in gender equality-—plays a crucial role in shaping voting behavior.
 
-Using survey data collected between 2017 and 2020, the original study investigates whether changes in sexism over time are associated with increased support for Vox, a far-right party in Spain. The authors hypothesize that individuals who express greater sexist attitudes over time are more likely to support the far-right, reflecting a broader trend of gendered political polarization.
+Using survey data collected between 2017 and 2020, the original study investigates whether changes in sexism over time are associated with increased support for Vox, a far-right party in Spain.
+The authors hypothesize that individuals who express greater sexist attitudes over time are more likely to support the far-right, reflecting a broader trend of gendered political polarization.
 
 ## Original Study
 
-The unit of analysis in the dataset used in the original study is individual survey respondents. Each row in the dataset represents an individual who participated in the survey, providing responses on their political preferences, sexist attitudes, and demographic characteristics over multiple time periods. The data was collected before and after key political events (e.g., elections, feminist protests) to capture potential shifts in attitudes and voting behavior. The cleaned dataset that the authors ultimately used in their analysis (which we will also use in our analysis) consists of 123 observations. 
+The unit of analysis in the dataset used in the original study is individual survey respondents.
+Each row in the dataset represents an individual who participated in the survey, providing responses on their political preferences, sexist attitudes, and demographic characteristics over multiple time periods.
+The data was collected before and after key political events (e.g., elections, feminist protests) to capture potential shifts in attitudes and voting behavior.
+The cleaned dataset that the authors ultimately used in their analysis (which we will also use in our analysis) consists of 123 observations.
 
-Observational independence concerns exist because the longitudinal dataset (2017-2020) introduces within-subject correlation as the same individuals were tracked over time. Respondents may modify their self-reported sexism and political preferences based on social norms, creating measurement bias. Additionally, major events like #MeToo and Women's Day protests likely influenced responses across the sample simultaneously, creating time-based dependencies.
+Observational independence concerns exist because the longitudinal dataset (2017-2020) introduces within-subject correlation as the same individuals were tracked over time.
+Respondents may modify their self-reported sexism and political preferences based on social norms, creating measurement bias.
+Additionally, major events like #MeToo and Women's Day protests likely influenced responses across the sample simultaneously, creating time-based dependencies.
 
 ### Original Model
 
@@ -34,27 +41,24 @@ Observational independence concerns exist because the longitudinal dataset (2017
 vox <- read.csv("data/cleaned.csv")
 ```
 
-The original authors fit two logit models predicting intention to vote for the Vox party for 2019 and 2020. In the study, they describe the linear predictor as:
+The original authors fit two logistic regression (logit) models predicting intention to vote for the Vox party for 2019 and 2020 (Table 1: Predictors of Intention to Vote for Vox in 2019 and 2020).
+In the study, they describe the linear predictor as:
 
-$$vox_{it} = sexism_{it} + other attitudes_{it} + controls_{it}$$
-where $i$ refers to individuals and $t$ refers to wave (2019 or 2020). For the purposes of the current analysis, we will only consider the $t=2019$ wave.
+$$vox_{it} = sexism_{it} + other attitudes_{it} + controls_{it}$$ where $i$ refers to individuals and $t$ refers to wave (2019 or 2020).
+For the purposes of the current analysis, we will only consider the $t=2019$ wave.
 
-The dependent variable of the model is `vim_vox`. This is a binary variable indicating a person's intention to vote for the Vox party. The histogram below depicts the distribution of this variable.
+The dependent variable of the model is `vim_vox`.
+This is a binary variable indicating a person's intention to vote for the Vox party.
+The histogram below depicts the distribution of this variable.
 
 ```{r}
 hist(vox$vim_vox, breaks = 2, col = "lightblue", main = "Histogram of Intention to Vote for Vox",
       xlab = "Vote Intention for Vox", ylab = "Frequency")
 ```
 
-**What are the predictor variables?**
 The study examines several predictors to explain support for far-right parties, with a focus on sexist attitudes as the central explanatory variable.
-
-What kind of model are you replicating?
-(logit)
-
-What do the original authors hope to achieve with this model?
-
-**INCLUDE SCREENSHOT OF ORIGINAL REGRESSION TABLE**
+More specifically, "other attitudes" in the linear predictor refers to ideology, authoritarianism, nativism, territorial preferences and populism variables.
+"Controls" refers to the variables of sex, age, education, income, living with a partner, and interest in politics.
 
 # Replication of Original Model
 
