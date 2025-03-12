@@ -138,3 +138,10 @@ ggplot(predicted_probs, aes(x = pred, fill = as.factor(vim_vox))) +
   theme_minimal()
 
 ```
+missing data:
+
+We checked for missing values and chose appropriate imputation strategies to ensure the reliability of our findings. made sure to filter for 2019 only before fitting the model. Missing data was handled using median (for income) and mode (for living status) to prevent bias. Non-significant predictors were removed to improve model accuracy. 
+
+Key variables were kept because they showed strong effects on voting behavior. We dropped variables that were not statistically significant (p-value > 0.05).
+
+The new model keeps only predictors that showed a significant relationship with "vim_vox," such as age (older individuals were more likely to support Vox). Certain sexism attitudes had a strong effect. People with strong nationalist views were more likely to vote Vox. Those identifying as more right-wing strongly favored Vox. People against regional autonomy were less likely to vote for Vox.
