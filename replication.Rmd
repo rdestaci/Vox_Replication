@@ -242,11 +242,8 @@ Interpreting this plot, we see that nativism has an overall positive relationshi
 
 # Summary
 
-Summarize conclusions.
+In summary, our current analysis supports the idea that the original model is so far the best model for predicting intention to vote for the Vox party for the 2019 wave. Simplifying the model does not seem to improve in-sample fit or out-of-sample prediction to the data. Our analysis also supports the original authors' conclusion that nativism is a key positive factor that increases the likelihood of a person voting for Vox. For further exploration, we could have included the 2020 wave and examined whether this model performs relatively better or poorer with the predictors of the simpler model. This could give insight into whether the issues associated with Vox have gotten more complex over time. Additionally, there are more variables in the dataset and possible interaction effects that could result in a more accurate model.
 
-How confident are you about the original author's conclusions?
-
-What else would you like to see done with this?
 
 # Appendix
 
