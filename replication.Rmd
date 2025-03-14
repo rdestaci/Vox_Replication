@@ -1,6 +1,5 @@
 ---
-title: "Replication of 'Sexism and the Far-Right Vote: The Individual Dynamics of
-  Gender Backlash' (Anduiza & Rico, 2022)"
+title: "Replication of 'Sexism and the Far-Right Vote: The Individual Dynamics of Gender Backlash' (Anduiza & Rico, 2022)"
 author: "Reeka Estacio and Belynda Herrera"
 date: "2025-03-05"
 output: pdf_document
@@ -18,17 +17,13 @@ library(tidyverse)
 # Introduction
 
 The study ["Sexism and the Far-Right Vote: The Individual Dynamics of Gender Backlash"](https://doi.org/10.1111/ajps.12759) by Eva Anduiza and Guillem Rico (2022), published in the American Journal of Political Science (AJPS), examines the relationship between sexist attitudes and support for far-right political parties.
-The authors argue that gender backlash-—a reactionary response to perceived advances in gender equality-—plays a crucial role in shaping voting behavior.
+The authors argue that gender backlash—a reactionary response to perceived advances in gender equality—plays a crucial role in shaping voting behavior.
 
-Using survey data collected between 2017 and 2020, the original study investigates whether changes in sexism over time are associated with increased support for Vox, a far-right party in Spain.
-The authors hypothesize that individuals who express greater sexist attitudes over time are more likely to support the far-right, reflecting a broader trend of gendered political polarization.
+Using survey data collected between 2017 and 2020, the original study investigates whether changes in sexism over time are associated with increased support for Vox, a far-right party in Spain. The authors hypothesize that individuals who express greater sexist attitudes over time are more likely to support the far-right, reflecting a broader trend of gendered political polarization.
 
 ## Original Study
 
-The unit of analysis in the dataset used in the original study is individual survey respondents.
-Each row in the dataset represents an individual who participated in the survey, providing responses on their political preferences, sexist attitudes, and demographic characteristics over multiple time periods.
-The data was collected before and after key political events (e.g., elections, feminist protests) to capture potential shifts in attitudes and voting behavior.
-The cleaned dataset that the authors ultimately used in their analysis (which we will also use in our analysis) consists of 123 observations.
+The unit of analysis in the dataset used in the original study is individual survey respondents. Each row in the dataset represents an individual who participated in the survey, providing responses on their political preferences, sexist attitudes, and demographic characteristics over multiple time periods. The data was collected before and after key political events (e.g., elections, feminist protests) to capture potential shifts in attitudes and voting behavior. The cleaned dataset that the authors ultimately used in their analysis (which we will also use in our analysis) consists of 123 observations.
 
 Observational independence concerns exist because the longitudinal dataset (2017-2020) introduces within-subject correlation as the same individuals were tracked over time.
 Respondents may modify their self-reported sexism and political preferences based on social norms, creating measurement bias.
@@ -41,110 +36,209 @@ Additionally, major events like #MeToo and Women's Day protests likely influence
 vox <- read.csv("data/cleaned.csv")
 ```
 
-The original authors fit two logistic regression (logit) models predicting intention to vote for the Vox party for 2019 and 2020 (Table 1: Predictors of Intention to Vote for Vox in 2019 and 2020).
-In the study, they describe the linear predictor as:
+The original authors fit two logistic regression (logit) models predicting intention to vote for the Vox party for 2019 and 2020 (Table 1: Predictors of Intention to Vote for Vox in 2019 and 2020).In the study, they describe the linear predictor as:
 
-$$vox_{it} = sexism_{it} + other attitudes_{it} + controls_{it}$$ where $i$ refers to individuals and $t$ refers to wave (2019 or 2020).
-For the purposes of the current analysis, we will only consider the $t=2019$ wave.
+$$vox_{it} = sexism_{it} + other attitudes_{it} + controls_{it}$$ 
+
+where $i$ refers to individuals and $t$ refers to wave (2019 or 2020). For the purposes of the current analysis, we will only consider the $t=2019$ wave.
 
 The dependent variable of the model is `vim_vox`.
-This is a binary variable indicating a person's intention to vote for the Vox party.
-The histogram below depicts the distribution of this variable.
+This is a binary variable indicating a person's intention to vote for the Vox party. The histogram below depicts the distribution of this variable.
 
 ```{r}
+# Histogram of dependent variable
 hist(vox$vim_vox, breaks = 2, col = "lightblue", main = "Histogram of Intention to Vote for Vox",
       xlab = "Vote Intention for Vox", ylab = "Frequency")
 ```
 
-The study examines several predictors to explain support for far-right parties, with a focus on sexist attitudes as the central explanatory variable.
-More specifically, "other attitudes" in the linear predictor refers to ideology, authoritarianism, nativism, territorial preferences and populism variables.
+The study examines several predictors to explain support for far-right parties, with a focus on sexist attitudes as the central explanatory variable. Specifically, "other attitudes" in the linear predictor refers to ideology, authoritarianism, nativism, territorial preferences, and populism variables.
 "Controls" refers to the variables of sex, age, education, income, living with a partner, and interest in politics.
 
 # Replication of Original Model
 
-As in the original model, we fit a logistic regression on...
+As in the original model, we fit a logistic regression predicting `vim_vox` for the 2019 wave,indicating the intention to vote for the Vox party, with all the original predictors.
 
-The regression table is presented below.
+The results are reported in Table 1. The coefficients match the ones reported in the original study.
+
+\newpage{}
 
 ```{r}
-# Replicate model
+library(modelsummary)
 
-# modelsummary(replicated_model, output="gt")
+# Subset data
+vox_2019 <- vox %>%
+  filter(year == 2019) %>%  # Filter for 2019 observations
+  drop_na(female, age, nativism, msexism, orgterr,
+          edu3_2, edu3_3, dhincome_all, livingpartner, intpol, 
+          authoritarian, ideol, pop6amz)
+
+# Fit model
+original_model <- glm(vim_vox ~ female + age + edu3_2 + edu3_3 + dhincome_all + livingpartner + intpol + authoritarian + ideol + nativism + orgterr + pop6amz + msexism,  
+                family = binomial(link = "logit"), data = vox_2019)
+
+# Rename variables to match table
+predictors <- c(
+  "female" = "Female",
+  "age" = "Age",
+  "edu3_2" = "High school / Vocational",
+  "edu3_3" = "College",
+  "dhincome_all" = "Income",
+  "livingpartner" = "Lives with partner",
+  "intpol" = "Interest in politics",
+  "authoritarian" = "Authoritarianism",
+  "ideol" = "Ideological identification",
+  "nativism" = "Nativism",
+  "orgterr" = "Territorial preference",
+  "pop6amz" = "Populism",
+  "msexism" = "Sexism"
+)
+
+# Show regression table
+modelsummary(original_model,
+             coef_map = predictors,
+             title = "Replicated Original Model: Predictors of Intention to Vote for Vox in 2019",
+             output = "gt")
 ```
 
 # Additional Model
 
-We also considered (adding new predictor/removing predictor/changing link function) because...
+For the new model, we attempted to fit a simpler model to test whether it performs just as well as the original model. We retained the control variables `female` and `age`, which we believe have a strong relationship with `vim_vox` (older, non-female individuals were more likely to support Vox). 
+
+From the original model, we also kept attitude predictors that likely have strong effects on voting behaviors. People with strong nationalist views were more likely to vote Vox (`nativism`). People against regional autonomy were less likely to vote for Vox (`orgterr`). People with more reported sexist attitudes (`msexism`) are more likely to vote for Vox. Table 2 shows the regression table for the new model.
+
+\newpage{}
 
 ```{r}
-# Additional model
+# Fit new model
+new_model <- glm(vim_vox ~ female + age + nativism + msexism + orgterr, 
+                 family = binomial(link = "logit"), data = vox_2019)
 
-# modelsummary(new_model, output="gt")
+# Rename predictors
+new_predictors <- c(
+  "female" = "Female",
+  "age" = "Age",
+  "nativism" = "Nativism",
+  "msexism" = "Sexism",
+  "orgterr" = "Territorial preference"
+)
+
+# Show table
+modelsummary(new_model,
+             coef_map = new_predictors,
+             title = "New Model: Predictors of Intention to Vote for Vox in 2019",
+             output = "gt")
 ```
 
 # Comparing Models
 
 ## In-Sample Prediction
 
-```{r}
-# Show both models
+To assess the performance of these models, we first compared model AIC and log likelihood as they reported in the regression tables.
 
-# models <- list(original_model, new_model)
-# modelsummary(models, output="gt")
+```{r, results='hide'}
+og_AIC <- AIC(original_model)
+new_AIC <- AIC(new_model)
+og_ll <- logLik(original_model)
+new_ll <- logLik(new_model)
 ```
 
-Compare AIC/BIC, log likelihood, MSE.
+```{r}
+cat(paste("Original model AIC:", round(og_AIC, 2), "\n"))
+cat(paste("New model AIC:", round(new_AIC, 2), "\n\n"))
+```
+
+```{r}
+cat(paste("Original model log likelihood:", round(og_ll, 2), "\n"))
+cat(paste("New model log likelihood:", round(new_ll, 2), "\n\n"))
+```
+
+The original model shows lower AIC, indicating that it performs better than the new model on in-sample prediction. The original model also has a greater log likelihood than the new model, suggesting that it explains more of the variance than the new model.
+
+```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+# Likelihood ratio test
+library(lmtest)
+lrtest(original_model, new_model)
+```
+We then performed a likelihood ratio test between the original and new model. The test shows a significant difference between the models $(p < 0.001)$, reinforcing the conclusion that the original model results in better fit.
 
 ## Out-of-Sample Prediction
 
-```{r}
-# Use cross-validation
-# Calculate error
+To assess out-of-sample prediction, we used the 10-fold cross-validation method and compared accuracy.
+
+```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
+library(caret)
+k_fold <- trainControl(method = "cv", number = 10)
+
+# Cross-validation for original model
+cv_original <- train(as.factor(vim_vox) ~ female + age + edu3_2 + edu3_3 + dhincome_all + 
+                             livingpartner + intpol + authoritarian + ideol + 
+                             nativism + orgterr + pop6amz + msexism,  
+                             data = vox_2019, method = "glm", 
+                             trControl = k_fold, family = binomial)
+
+# Cross-validation for new model
+cv_new <- train(as.factor(vim_vox) ~ female + age + nativism + msexism + orgterr, 
+                       data = vox_2019, method = "glm", 
+                       trControl = k_fold, family = binomial)
 ```
 
-Interpret this.
-
-Based on the error, (original/new) model performs better on out-of-sample prediction.
-
-Ultimately, we believe the **(original/new) model** is the better model because...
-
-# Exploring the Effect of (Quantity of Interest)
-
-We aim to explore the effect of (quantity of interest) on (dependent variable).
 
 ```{r}
-# From problem set
-# ADAPT TO CURRENT DATA
+# Compare accuracy
+og_accuracy <- cv_original$results$Accuracy[1]
+new_accuracy <- cv_new$results$Accuracy[1]
 
-# Make scenarios
-# Hold sanctions75 and pop75 fixed at the median 
+cat(paste("Original model CV accuracy:", round(og_accuracy, 4), "\n"))
+cat(paste("New model CV accuracy:", round(new_accuracy, 4), "\n\n"))
+```
+
+After performing 10-fold cross-validation, the original model shows a slightly higher accuracy than the new model on out-of-sample prediction. However, both models do relatively well.
+
+Based on both the in-sample and out-of-sample prediction diagnostics we examined, we select the **original model** as the better of the two models. The original model shows lower AIC, greater log likelihood, and explains more of the variance within the data. It also performs slightly better than the new model in out-of-sample prediction.
+
+# Exploring the Effect of Nativism Predictor on Intention to Vote for Vox
+
+Using the original model, we aim to explore the effect of `nativism` on intention to vote for Vox for the 2019 wave (`vim_vox`). We chose this variable because as the original study suggests, nativist attitudes seem to strongly align with the political beliefs associated with the Vox party.
+
+```{r}
+# Create scenarios
+# Hold all other variables fixed at the median
 scenarios <- data.frame(
-  sanctions75 = median(dat$sanctions75),
-  pop75 = median(dat$pop75),
-  polrights75 = seq(min(dat$polrights75, na.rm = TRUE), max(dat$polrights75, na.rm = TRUE)) # compare polrights75 at different values
+  female = median(vox_2019$female),
+  age = median(vox_2019$age),
+  edu3_2 = median(vox_2019$edu3_2),
+  edu3_3 = median(vox_2019$edu3_3),
+  dhincome_all = median(vox_2019$dhincome_all),
+  livingpartner = median(vox_2019$livingpartner),
+  intpol = median(vox_2019$intpol),
+  authoritarian = median(vox_2019$authoritarian),
+  ideol = median(vox_2019$ideol),
+  nativism = seq(min(vox_2019$nativism, na.rm = TRUE), max(vox_2019$nativism, na.rm = TRUE), length.out = 100), # predictor of interest
+  orgterr = median(vox_2019$orgterr),
+  pop6amz = median(vox_2019$pop6amz),
+  msexism = median(vox_2019$msexism)
 )
 
 # Generate predictions
-predictions <- predict(nb_mod, newdata = scenarios, type = "response", se.fit = TRUE)
+predictions <- predict(original_model, newdata = scenarios, type = "response", se.fit = TRUE)
 
-# Add predictions and confidence intervals to the dataframe
-scenarios$predicted_deaths75 <- predictions$fit
+# Add predictions and confidence intervals to dataframe
+scenarios$predicted_vim_vox <- predictions$fit
 scenarios$lower_ci <- predictions$fit - 1.96 * predictions$se.fit  
 scenarios$upper_ci <- predictions$fit + 1.96 * predictions$se.fit 
 
 # Plot predictions
-ggplot(scenarios, aes(x = polrights75, y = predicted_deaths75)) +
-  geom_line() +
+ggplot(scenarios, aes(x = nativism, y = predicted_vim_vox)) +
+  geom_line(color = "blue") +
   geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), alpha = 0.2, fill = "blue") +
-  labs(title = "Effect of polrights75 on predicted deaths in 1975",
-       x = "`polrights75`",
-       y = "Predicted deaths in 1975") +
+  labs(title = "Effect of Nativism on Predicted Probability of Voting for Vox",
+       x = "Nativism",
+       y = "Predicted Probability of Voting for Vox") +
   theme_minimal()
+
 ```
 
-Interpret the results.
-
-Based on this plot, we see that (quantity of interest) has a \_\_\_\_ relationship on (dependent variable).
+Interpreting this plot, we see that nativism has an overall positive relationship on intention to vote for the Vox party. In other words, individuals with stronger nativist beliefs are more likely to vote for Vox based on the data. The 95% confidence interval, however, significantly widens at higher levels of nativism, indicating greater uncertainty around these predictions.
 
 # Summary
 
@@ -156,6 +250,6 @@ What else would you like to see done with this?
 
 # Appendix
 
-We used ChatGPT to...
+We used ChatGPT to troubleshoot errors that came up when trying to run model evaluation diagnostics. When trying to perform the likelihood ratio test, for instance, it was resulting in an error about dataset size that we could not figure out. This was helpful because it helped us find a general solution that worked for this problem, as well as other problems down the road.
 
-[Link to conversation]()
+[Link to conversation](https://chatgpt.com/share/67d3fb67-3540-8003-b60d-1a7479cc4e83)
