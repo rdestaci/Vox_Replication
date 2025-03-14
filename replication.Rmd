@@ -23,7 +23,7 @@ Using survey data collected between 2017 and 2020, the original study investigat
 
 ## Original Study
 
-The unit of analysis in the dataset used in the original study is individual survey respondents. Each row in the dataset represents an individual who participated in the survey, providing responses on their political preferences, sexist attitudes, and demographic characteristics over multiple time periods. The data was collected before and after key political events (e.g., elections, feminist protests) to capture potential shifts in attitudes and voting behavior. The cleaned dataset that the authors ultimately used in their analysis (which we will also use in our analysis) consists of 123 observations.
+The unit of analysis in the dataset used in the original study is individual survey respondents. Each row in the dataset represents an individual who participated in the survey, providing responses on their political preferences, sexist attitudes, and demographic characteristics over multiple time periods. The data was collected before and after key political events (e.g., elections, feminist protests) to capture potential shifts in attitudes and voting behavior. The cleaned dataset that the authors ultimately used in their analysis (which we also use in our analysis) consists of 123 observations.
 
 Observational independence concerns exist because the longitudinal dataset (2017-2020) introduces within-subject correlation as the same individuals were tracked over time.
 Respondents may modify their self-reported sexism and political preferences based on social norms, creating measurement bias.
@@ -102,7 +102,7 @@ modelsummary(original_model,
 
 # Additional Model
 
-For the new model, we attempted to fit a simpler model to test whether it performs just as well as the original model. We retained the control variables `female` and `age`, which we believe have a strong relationship with `vim_vox` (older, non-female individuals were more likely to support Vox). 
+For the new model, we attempted to fit a simpler model to test whether it performs just as well as the original model. We retained the control variables `female` and `age`, which we believe have a strong relationship with `vim_vox` (older, non-female individuals are more likely to support Vox). 
 
 From the original model, we also kept attitude predictors that likely have strong effects on voting behaviors. People with strong nationalist views were more likely to vote Vox (`nativism`). People against regional autonomy were less likely to vote for Vox (`orgterr`). People with more reported sexist attitudes (`msexism`) are more likely to vote for Vox. Table 2 shows the regression table for the new model.
 
@@ -133,7 +133,7 @@ modelsummary(new_model,
 
 ## In-Sample Prediction
 
-To assess the performance of these models, we first compared model AIC and log likelihood as they reported in the regression tables.
+To assess the performance of these models, we first compared the AIC and log likelihood reported in the regression tables.
 
 ```{r, results='hide'}
 og_AIC <- AIC(original_model)
@@ -163,7 +163,7 @@ We then performed a likelihood ratio test between the original and new model. Th
 
 ## Out-of-Sample Prediction
 
-To assess out-of-sample prediction, we used the 10-fold cross-validation method and compared accuracy.
+To assess out-of-sample prediction, we used a 10-fold cross-validation method and compared accuracy.
 
 ```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 library(caret)
@@ -192,7 +192,7 @@ cat(paste("Original model CV accuracy:", round(og_accuracy, 4), "\n"))
 cat(paste("New model CV accuracy:", round(new_accuracy, 4), "\n\n"))
 ```
 
-After performing 10-fold cross-validation, the original model shows a slightly higher accuracy than the new model on out-of-sample prediction. However, both models do relatively well.
+The original model shows a slightly higher accuracy than the new model on out-of-sample prediction. However, both models do relatively well.
 
 Based on both the in-sample and out-of-sample prediction diagnostics we examined, we select the **original model** as the better of the two models. The original model shows lower AIC, greater log likelihood, and explains more of the variance within the data. It also performs slightly better than the new model in out-of-sample prediction.
 
