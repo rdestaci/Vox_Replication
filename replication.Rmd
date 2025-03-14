@@ -247,6 +247,6 @@ In summary, our current analysis supports the idea that the original model is so
 
 # Appendix
 
-We used ChatGPT to troubleshoot errors that came up when trying to run model evaluation diagnostics. When trying to perform the likelihood ratio test, for instance, it was resulting in an error about dataset size that we could not figure out. This was helpful because it helped us find a general solution that worked for this problem, as well as other problems down the road.
+We used ChatGPT to troubleshoot errors that came up when trying to run model evaluation diagnostics. When trying to perform the likelihood ratio test, for instance, it was resulting in an error about dataset size that we could not figure out. This was helpful because it helped us find a general solution that worked for this problem, as well as solving other problems down the road.
 
 [Link to conversation](https://chatgpt.com/share/67d3fb67-3540-8003-b60d-1a7479cc4e83)
