@@ -1,5 +1,9 @@
 # Replication of *Sexism and the Far-Right Vote: The Individual Dynamics of Gender Backlash* (Anduiza & Rico, 2022)
 
-This is a replication of the binary logit model for the year 2019, modeling the intention to vote for the Vox party. The regression table of this model is located in the first column of "Table 1. Predictors of Intention to Vote for Vox in 2019 and 2020" of the original paper.
+## Project Overview
+
+This is a replication of the 2019 binary logit model found in Table 1 of the study [“Sexism and the Far-Right Vote: The Individual Dynamics of Gender Backlash” (Anduiza & Rico 2022)](https://doi.org/10.1111/ajps.12759).
+
+The original analysis examines the relationship between sexist attitudes and support for far-right political parties in 2019 and 2020. The authors argue that gender backlash—a reactionary response to perceived advances in gender equality—plays a crucial role in shaping voting behavior. In our replication, we further this analysis by probing whether fitting a simpler logistic regression model sufficiently explains the observed data, as well as examining the effect of a single predictor (`nativism`) affects predicted voter behavior.
 
 This is part of the final project for the course CSS 205/POLI 271, "Advanced Statistical Applications".
